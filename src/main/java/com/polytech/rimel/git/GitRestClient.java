@@ -12,7 +12,7 @@ public class GitRestClient {
     private static final String BASE_URL = "https://api.github.com/repos/";
     private static final String CLIENT_ID= "";
     private static final String CLIENT_SECRET = "";
-    private static final String GIT_CRED = "client_id="+CLIENT_ID+"&client_secret="+CLIENT_SECRET+;
+    private static final String GIT_CRED = "client_id="+CLIENT_ID+"&client_secret="+CLIENT_SECRET;
     private static final String PER_PAGE = "per_page=100";
     private static final String SHA = "sha=";
 
