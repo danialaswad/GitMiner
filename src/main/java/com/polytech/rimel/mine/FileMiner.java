@@ -8,6 +8,7 @@ import com.polytech.rimel.writer.FileWriter;
 import com.polytech.rimel.writer.SaveFile;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,9 +19,9 @@ public class FileMiner {
 
     private ObjectMapper mapper;
     private String filePath;
-    private String outputPath;
+    private Path outputPath;
 
-    FileMiner(String filePath, String outputPath){
+    FileMiner(String filePath, Path outputPath) {
         this.outputPath = outputPath;
         this.filePath = filePath;
         this.mapper = new ObjectMapper();
@@ -58,7 +59,7 @@ public class FileMiner {
                     String fileName = file.getFileName().replaceAll("/", "-");
 
                     // Saving file
-                    new SaveFile().execute(new FileWriter(outputPath + "/" + commitHistory.getCommit().getCommitter().getDate() + fileName, output));
+                    new SaveFile().execute(new FileWriter(outputPath.toString() + "/" + commitHistory.getCommit().getCommitter().getDate() + fileName, output));
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }

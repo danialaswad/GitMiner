@@ -22,7 +22,7 @@ public class Miner {
     private String owner;
     private String repository;
     private String filePath;
-    private String outputPath;
+    private Path outputPath;
 
     private ObjectMapper mapper;
 
@@ -30,7 +30,7 @@ public class Miner {
         this.owner = "";
         this.repository="";
         this.filePath="";
-        this.outputPath="";
+        this.outputPath = Paths.get("");
         this.mapper = new ObjectMapper();
         this.gitClient = new GitRestClient();
     }
@@ -50,7 +50,7 @@ public class Miner {
         return this;
     }
     public Miner toOutput(String outputPath){
-        this.outputPath = outputPath;
+        this.outputPath = Paths.get(outputPath);
         return this;
     }
 
@@ -66,10 +66,10 @@ public class Miner {
         if (filePath.equals("")){
             throw new GitRestClientException("Please provide file path");
         }
-        if (outputPath.equals("")){
+        if (outputPath.toString().equals("")) {
             throw new GitRestClientException("Please provide an output path");
         }
-        if(!isAccessibility(outputPath)){
+        if (!isAccessibility(outputPath.toString())) {
             throw new GitRestClientException("Please provide a valid output path");
         }
 

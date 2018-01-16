@@ -18,19 +18,15 @@ public class FileWriter implements WriterInterface {
         this.source = source;
     }
 
-    public void writeToFile(String data, String path){
+    @Override
+    public void write() {
         try {
-            LOGGER.log(Level.INFO, "Writing data to " + path);
-            PrintWriter writer = new PrintWriter(path, "UTF-8");
-            writer.write(data);
+            LOGGER.log(Level.INFO, "Writing data to " + filename);
+            PrintWriter writer = new PrintWriter(filename, "UTF-8");
+            writer.write(source);
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void write() {
-        writeToFile(source, filename);
     }
 }
