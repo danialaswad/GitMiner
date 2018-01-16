@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class Miner {
 
     private final static Logger LOGGER = Logger.getLogger(Miner.class.getName());
-    private static final String BASE_URL = "https://api.github.com/repos/";
+
     private GitRestClient gitClient;
     private String owner;
     private String repository;
@@ -73,19 +73,17 @@ public class Miner {
             throw new GitRestClientException("Please provide a valid output path");
         }
 
-
         try {
             LOGGER.log(Level.INFO, "Retrieving commits history for " + filePath + " from " + owner + "/" + repository);
 
             String output = gitClient.retrieveCommits(owner, repository, filePath);
 
-            List<CommitHistory> cm = mapper.readValue(output,new TypeReference<List<CommitHistory>>(){});
+            List<CommitHistory> commitHistoryList = mapper.readValue(output, new TypeReference<List<CommitHistory>>() {
+            });
 
-            continueRetrieveCommits(owner, repository, filePath, cm);
+            continueRetrieveCommits(owner, repository, filePath, commitHistoryList);
 
-            System.out.println(cm.size());
-
-            new FileMiner(filePath, outputPath).retrieveFileHistory(cm, gitClient);
+            new FileMiner(filePath, outputPath).retrieveFileHistory(commitHistoryList, gitClient);
 
             LOGGER.log(Level.INFO, "FINISH");
         } catch (IOException | InterruptedException e) {
@@ -95,15 +93,16 @@ public class Miner {
     }
 
     //TODO
-    private void continueRetrieveCommits(String owner, String repository, String filePath, List<CommitHistory> cm){
+    private void continueRetrieveCommits(String owner, String repository, String filePath, List<CommitHistory> commitHistoryList) {
         try {
-            String output = gitClient.retrieveCommits(owner, repository, filePath, cm.get(cm.size()-1).getSha());
-            List<CommitHistory> commitHistories = mapper.readValue(output,new TypeReference<List<CommitHistory>>(){});
-            if (commitHistories.size()<=1 && commitHistories.get(0).getSha().equals(cm.get(cm.size()-1).getSha())){
+            String output = gitClient.retrieveCommits(owner, repository, filePath, commitHistoryList.get(commitHistoryList.size() - 1).getSha());
+            List<CommitHistory> tmp = mapper.readValue(output, new TypeReference<List<CommitHistory>>() {
+            });
+            if (tmp.size() <= 1 && tmp.get(0).getSha().equals(commitHistoryList.get(commitHistoryList.size() - 1).getSha())) {
                 return;
             }
-            cm.addAll(commitHistories);
-            continueRetrieveCommits(owner, repository, filePath, cm);
+            commitHistoryList.addAll(tmp);
+            continueRetrieveCommits(owner, repository, filePath, commitHistoryList);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

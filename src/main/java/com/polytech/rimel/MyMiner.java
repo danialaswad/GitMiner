@@ -14,10 +14,10 @@ public class MyMiner implements GitMiner{
     @Override
     public void execute() {
         new Miner()
-                .fromOwner("laradock")
-                .inRepository("laradock")
+                .fromOwner("mirumee")
+                .inRepository("saleor")
                 .getFile("docker-compose.yml")
-                .toOutput("/Users/danial/Desktop/tmp")
+                .toOutput("/Users/danial/Desktop/tmp/saleor")
                 .execute();
     }
 }

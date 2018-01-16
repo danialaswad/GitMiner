@@ -51,6 +51,16 @@ public class GitRestClient {
 
 
         Response response = client.newCall(request).execute();
+        if (response.code() != 200) {
+            if (response.code() == 403) {
+                // Sleep for 1 minute if our session is revoke
+                Thread.sleep(60000);
+                return establishConnection(url);
+            } else {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.code());
+            }
+        }
         return response.body().string();
     }
 }
