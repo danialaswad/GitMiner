@@ -7,7 +7,6 @@ import com.polytech.rimel.mine.Miner;
 public class MyMiner implements GitMiner{
 
     public static void main(String[] args) {
-
         new GitFileMiner().start(new MyMiner());
     }
 
@@ -17,7 +16,9 @@ public class MyMiner implements GitMiner{
                 .fromOwner("scipio3000")
                 .inRepository("polytech-soa")
                 .getFile("integration/docker-compose.yml")
-                .toOutput("/Users/danial/Desktop/tmp/soa")
+                .toOutput("/Desktop/tmp/soa")
                 .execute();
+
+
     }
 }
