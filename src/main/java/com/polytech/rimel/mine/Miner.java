@@ -5,17 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polytech.rimel.exceptions.GitRestClientException;
 import com.polytech.rimel.git.GitRestClient;
 import com.polytech.rimel.model.CommitHistory;
-import com.polytech.rimel.writer.FileWriter;
-import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
