@@ -11,6 +11,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommitHistory {
 
+
+    @JsonProperty("sha")
+    private String sha;
     @JsonProperty("url")
     private String url;
     @JsonProperty("html_url")
@@ -19,6 +22,14 @@ public class CommitHistory {
     private Commit commit;
     @JsonProperty("files")
     private List<File> files;
+
+    public String getSha() {
+        return sha;
+    }
+
+    public void setSha(String sha) {
+        this.sha = sha;
+    }
 
     public String getUrl() {
         return url;
