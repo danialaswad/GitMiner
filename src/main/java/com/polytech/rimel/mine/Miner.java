@@ -69,6 +69,9 @@ public class Miner {
         if (outputPath.toString().equals("")) {
             throw new GitRestClientException("Please provide an output path");
         }
+        if (!isAccessibility(outputPath.toString())) {
+            throw new GitRestClientException("Please provide a valid output path");
+        }
 
         try {
             LOGGER.log(Level.INFO, "Retrieving commits history for " + filePath + " from " + owner + "/" + repository);
