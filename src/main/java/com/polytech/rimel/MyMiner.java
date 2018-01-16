@@ -14,9 +14,9 @@ public class MyMiner implements GitMiner{
     @Override
     public void execute() {
         new Miner()
-                .fromOwner("sa-2017-2018-team-5")
-                .inRepository("priority-rules-system")
-                .getFile("docker-compose.yml")
+                .fromOwner("scipio3000")
+                .inRepository("polytech-soa")
+                .getFile("integration/docker-compose.yml")
                 .toOutput("/Users/danial/Desktop/tmp")
                 .execute();
     }

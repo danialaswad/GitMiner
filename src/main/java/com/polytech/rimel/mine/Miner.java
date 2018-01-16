@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polytech.rimel.exceptions.GitRestClientException;
 import com.polytech.rimel.git.GitRestClient;
 import com.polytech.rimel.model.CommitHistory;
+import com.polytech.rimel.writer.FileWriter;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,16 +82,11 @@ public class Miner {
 
         try {
             LOGGER.log(Level.INFO, "Retrieving commits history for " + filePath + " from " + owner + "/" + repository);
-            HttpURLConnection conn = gitClient.retrieveCommits(owner, repository, filePath);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (conn.getInputStream())));
-
-            String output = IOUtils.toString(br);
-
-            conn.disconnect();
+            String output = gitClient.retrieveCommits(owner, repository, filePath);
 
             List<CommitHistory> cm = mapper.readValue(output,new TypeReference<List<CommitHistory>>(){});
+
 
             new FileMiner(filePath, outputPath).retrieveFileHistory(cm, gitClient);
 
@@ -98,6 +95,21 @@ public class Miner {
             e.printStackTrace();
         }
         return this;
+    }
+
+    // TODO
+    private List<CommitHistory> continueRetrieveCommits(String owner, String repository, String filePath, String sha){
+        List<CommitHistory> cm = new ArrayList<>();
+        try {
+            String output = gitClient.retrieveCommits(owner, repository, filePath, sha);
+            cm = mapper.readValue(output,new TypeReference<List<CommitHistory>>(){});
+            if(!cm.get(cm.size()-1).getParents().isEmpty()) {
+                cm.addAll(continueRetrieveCommits(owner, repository, filePath, cm.get(cm.size() - 1).getSha()));
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return cm;
     }
 
     private boolean isAccessibility(String outputPath){

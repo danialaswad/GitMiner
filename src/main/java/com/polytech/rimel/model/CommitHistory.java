@@ -22,6 +22,8 @@ public class CommitHistory {
     private Commit commit;
     @JsonProperty("files")
     private List<File> files;
+    @JsonProperty("parents")
+    private List<Parent> parents;
 
     public String getSha() {
         return sha;
@@ -61,6 +63,14 @@ public class CommitHistory {
 
     public void setFiles(List<File> files) {
         this.files = files;
+    }
+
+    public List<Parent> getParents() {
+        return parents;
+    }
+
+    public void setParents(List<Parent> parents) {
+        this.parents = parents;
     }
 
     @Override
