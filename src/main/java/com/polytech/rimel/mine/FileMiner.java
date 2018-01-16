@@ -9,6 +9,7 @@ import com.polytech.rimel.writer.SaveFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,8 +60,8 @@ public class FileMiner {
                     String fileName = file.getFileName().replaceAll("/", "-");
 
                     // Saving file
-                    new SaveFile().execute(new FileWriter(outputPath.toString() + "/" + commitHistory.getCommit().getCommitter().getDate() + fileName, output));
-                } catch (IOException | InterruptedException e) {
+                    new SaveFile().execute(new FileWriter(outputPath.toString() + "/" + commitHistory.getCommit().getCommitter().getPrintableDate() + fileName, output));
+                } catch (IOException | InterruptedException | ParseException e) {
                     e.printStackTrace();
                 }
             }
