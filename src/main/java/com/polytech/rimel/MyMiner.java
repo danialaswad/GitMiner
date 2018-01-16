@@ -16,7 +16,7 @@ public class MyMiner implements GitMiner{
                 .fromOwner("scipio3000")
                 .inRepository("polytech-soa")
                 .getFile("integration/docker-compose.yml")
-                .toOutput("/Desktop/tmp/soa")
+                .toOutput("/Users/danial/Desktop/tmp/soa/")
                 .execute();
 
 

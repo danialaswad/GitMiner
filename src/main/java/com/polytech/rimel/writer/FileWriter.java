@@ -22,7 +22,7 @@ public class FileWriter implements WriterInterface {
     public void write() {
         try {
             LOGGER.log(Level.INFO, "Writing data to " + filename);
-            PrintWriter writer = new PrintWriter(System.getProperty("user.home") + filename, "UTF-8");
+            PrintWriter writer = new PrintWriter(filename, "UTF-8");
             writer.write(source);
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
