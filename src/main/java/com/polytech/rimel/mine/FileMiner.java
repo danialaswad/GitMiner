@@ -26,7 +26,6 @@ public class FileMiner {
     }
 
     void retrieveFileHistory(List<CommitHistory> commitHistories, GitRestClient gitClient){
-        System.out.println(commitHistories.size());
         for (CommitHistory commitHistory: commitHistories) {
             retrieveFileHistory(commitHistory, gitClient);
         }

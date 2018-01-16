@@ -87,6 +87,9 @@ public class Miner {
 
             List<CommitHistory> cm = mapper.readValue(output,new TypeReference<List<CommitHistory>>(){});
 
+            continueRetrieveCommits(owner, repository, filePath, cm);
+
+            System.out.println(cm.size());
 
             new FileMiner(filePath, outputPath).retrieveFileHistory(cm, gitClient);
 
@@ -97,19 +100,19 @@ public class Miner {
         return this;
     }
 
-    // TODO
-    private List<CommitHistory> continueRetrieveCommits(String owner, String repository, String filePath, String sha){
-        List<CommitHistory> cm = new ArrayList<>();
+    //TODO
+    private void continueRetrieveCommits(String owner, String repository, String filePath, List<CommitHistory> cm){
         try {
-            String output = gitClient.retrieveCommits(owner, repository, filePath, sha);
-            cm = mapper.readValue(output,new TypeReference<List<CommitHistory>>(){});
-            if(!cm.get(cm.size()-1).getParents().isEmpty()) {
-                cm.addAll(continueRetrieveCommits(owner, repository, filePath, cm.get(cm.size() - 1).getSha()));
+            String output = gitClient.retrieveCommits(owner, repository, filePath, cm.get(cm.size()-1).getSha());
+            List<CommitHistory> commitHistories = mapper.readValue(output,new TypeReference<List<CommitHistory>>(){});
+            if (commitHistories.size()<=1 && commitHistories.get(0).getSha().equals(cm.get(cm.size()-1).getSha())){
+                return;
             }
+            cm.addAll(commitHistories);
+            continueRetrieveCommits(owner, repository, filePath, cm);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return cm;
     }
 
     private boolean isAccessibility(String outputPath){
