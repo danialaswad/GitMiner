@@ -15,6 +15,7 @@ public class GitRestClient {
     private static final String GIT_CRED = "client_id="+CLIENT_ID+"&client_secret="+CLIENT_SECRET;
     private static final String PER_PAGE = "per_page=100";
     private static final String SHA = "sha=";
+    private static final int SLEEP_DURATION = 60000;
 
     private final static Logger LOGGER = Logger.getLogger(GitRestClient.class.getName());
 
@@ -54,7 +55,7 @@ public class GitRestClient {
         if (response.code() != 200) {
             if (response.code() == 403) {
                 // Sleep for 1 minute if our session is revoke
-                Thread.sleep(60000);
+                Thread.sleep(SLEEP_DURATION);
                 return establishConnection(url);
             } else {
                 throw new RuntimeException("Failed : HTTP error code : "
