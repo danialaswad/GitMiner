@@ -5,6 +5,7 @@ import com.polytech.rimel.git.GitRestClient;
 import com.polytech.rimel.model.CommitHistory;
 import com.polytech.rimel.model.File;
 import com.polytech.rimel.writer.FileWriter;
+import com.polytech.rimel.writer.SaveFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +56,9 @@ public class FileMiner {
                     String output = gitClient.retrieveFile(file.getRawUrl());
 
                     String fileName = file.getFileName().replaceAll("/", "-");
-                    new FileWriter().writeToFile(output, outputPath + "/" + commitHistory.getCommit().getCommitter().getDate() + fileName);
+
+                    // Saving file
+                    new SaveFile().execute(new FileWriter(outputPath + "/" + commitHistory.getCommit().getCommitter().getDate() + fileName, output));
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
