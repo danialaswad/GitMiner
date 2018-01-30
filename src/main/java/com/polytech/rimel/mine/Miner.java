@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polytech.rimel.exceptions.GitRestClientException;
 import com.polytech.rimel.git.GitRestClient;
 import com.polytech.rimel.model.CommitHistory;
+import com.polytech.rimel.model.Repository;
+import com.polytech.rimel.writer.CSVWriter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +24,7 @@ public class Miner {
     private String owner;
     private String repository;
     private String filePath;
-    private Path outputPath;
+    private CSVWriter csvWriter;
 
     private ObjectMapper mapper;
 
@@ -30,9 +32,9 @@ public class Miner {
         this.owner = "";
         this.repository="";
         this.filePath="";
-        this.outputPath = Paths.get("");
         this.mapper = new ObjectMapper();
         this.gitClient = new GitRestClient();
+        this.csvWriter = new CSVWriter();
     }
 
     public Miner fromOwner(String owner){
@@ -49,10 +51,6 @@ public class Miner {
         this.filePath = filePath;
         return this;
     }
-    public Miner toOutput(String outputPath){
-        this.outputPath = Paths.get(outputPath);
-        return this;
-    }
 
 
     public Miner execute(){
@@ -66,15 +64,11 @@ public class Miner {
         if (filePath.equals("")){
             throw new GitRestClientException("Please provide file path");
         }
-        if (outputPath.toString().equals("")) {
-            throw new GitRestClientException("Please provide an output path");
-        }
-        if (!isAccessibility(outputPath.toString())) {
-            throw new GitRestClientException("Please provide a valid output path");
-        }
 
         try {
             LOGGER.log(Level.INFO, "Retrieving commits history for " + filePath + " from " + owner + "/" + repository);
+
+            Repository repo = new Repository(owner, repository, filePath);
 
             String output = gitClient.retrieveCommits(owner, repository, filePath);
 
@@ -83,7 +77,7 @@ public class Miner {
 
             continueRetrieveCommits(owner, repository, filePath, commitHistoryList);
 
-            new FileMiner(filePath, outputPath).retrieveFileHistory(commitHistoryList, gitClient);
+            new FileMiner(filePath, csvWriter).retrieveFileHistory(commitHistoryList, repo, gitClient);
 
             LOGGER.log(Level.INFO, "FINISH");
         } catch (IOException | InterruptedException e) {

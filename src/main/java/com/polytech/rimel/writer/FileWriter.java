@@ -1,5 +1,9 @@
 package com.polytech.rimel.writer;
 
+import com.polytech.rimel.model.CommitHistory;
+import com.polytech.rimel.model.DockerCompose;
+import com.polytech.rimel.model.Repository;
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -19,7 +23,7 @@ public class FileWriter implements WriterInterface {
     }
 
     @Override
-    public void write() {
+    public void write(Repository repository, CommitHistory cm, DockerCompose compose, String dockerFile) {
         try {
             LOGGER.log(Level.INFO, "Writing data to " + filename);
             PrintWriter writer = new PrintWriter(filename, "UTF-8");

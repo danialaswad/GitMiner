@@ -43,7 +43,7 @@ public class Committer {
     public String getPrintableDate() throws ParseException {
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         Date date = parser.parse(getDate());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd.HH-mm-ss.");
         return formatter.format(date);
     }
     @Override
